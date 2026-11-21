@@ -6,13 +6,7 @@ Hardware SHA-3 core implementing FIPS 202 SHA3-224/256/384/512, selectable per m
 
 ## Architecture
 
-```
-byte stream (valid/ready, last, keep) ──► absorb into rate ──► Keccak-f[1600] ──► digest
-                                          (XOR at byte ptr)    1 round / clock
-                                                │ rate full / last byte
-                                                ▼
-                                        pad 0x06 … 0x80 (in hardware)
-```
+![Architecture](docs/diagrams/architecture.svg)
 
 - `rtl/keccak_round.sv`: one full round (θ, ρ, π, χ, ι), purely combinational, generated lane by lane.
 - `rtl/sha3_core.sv`: absorb / pad / permute FSM, 24 clocks per block, mode sampled on the first byte.
@@ -38,6 +32,12 @@ make test      # generate vectors + simulate (Icarus)
 make lint
 make synth     # Yosys generic synthesis, cell report in build/
 ```
+
+## Test run
+
+Output of the CI command (`make test lint`), captured from a local run:
+
+![Test run](docs/screenshots/test_run.svg)
 
 ## Limitations / next steps
 
